@@ -6,8 +6,12 @@
 
     <g v-if="status!=='start' && status!=='end'">
       <g>
-        <text :x="getText().x" :y="getText().y" class="pipeline-node-label">{{getText().text}}</text>
+        <text :x="getText().xText" :y="getText().xText" class="pipeline-node-label">{{getText().text}}</text>
         <title>{{label}}</title>
+      </g>
+      <g v-if="getText().hint">
+        <text :x="getText().xHint" :y="getText().yHint" class="pipeline-node-hint">{{getText().hint}}</text>
+        <title>{{labelHint}}</title>
       </g>
       <g class="svgResultStatus">
         <circle cx="0" cy="0" r="12" :class="'circle-bg '+status"></circle>
@@ -35,8 +39,6 @@
         </g>
       </g>
     </g>
-
-    <title>{{hint}}</title>
 
     <!-- high light -->
     <circle r="19" class="pipeline-node-hittarget" fill-opacity="0" stroke="none">
@@ -70,6 +72,9 @@ export default {
     label: {
       type: String
     },
+    labelHint: {
+      type: String
+    },
     x: {
       type: Number
     },
@@ -96,11 +101,19 @@ export default {
         this.label.length > maxLength
           ? this.label.substring(0, maxLength) + '...'
           : this.label
-      let width = stringWidth(text)
+      let hint =
+        this.hint.length > maxLength
+          ? this.hint.substring(0, maxLength) + '...'
+          : this.hint
+      let widthText = stringWidth(text)
+      let widthHint = stringWidth(hint)
       return {
-        x: -width * 2.7,
-        y: -20,
-        text
+        xText: -widthText * 2.7,
+        yText: -20,
+        text,
+        xHint: -widthHint * 2.7,
+        yHint: 25,
+        hint
       }
     },
     handleClick() {
@@ -178,6 +191,17 @@ export default {
   width: 89px;
   /* max-height: 39px; */
   text-align: center;
+}
+.pipeline-node-hint {
+  font: 12px sans-serif;
+  font-size: 10px;
+  width: 100px;
+  overflow: hidden;
+  overflow-wrap: break-word;
+  position: absolute;
+  text-align: center;
+  color: #989AB3;
+  fill: #989AB3;
 }
 .running {
   fill: #8ccc4f;
