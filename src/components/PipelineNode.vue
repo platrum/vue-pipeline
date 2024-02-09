@@ -6,12 +6,12 @@
 
     <g v-if="status!=='start' && status!=='end'">
       <g>
-        <text :x="getText().xText" :y="getText().xText" class="pipeline-node-label">{{getText().text}}</text>
+        <text :x="getText().x" :y="getText().y" class="pipeline-node-label">{{getText().text}}</text>
         <title>{{label}}</title>
       </g>
-      <g v-if="getText().hint">
-        <text :x="getText().xHint" :y="getText().yHint" class="pipeline-node-hint">{{getText().hint}}</text>
-        <title>{{labelHint}}</title>
+      <g v-if="getHint().hint">
+        <text :x="getHint().x" :y="getHint().y" class="pipeline-node-hint">{{getHint().hint}}</text>
+        <title v-if="labelHint">{{labelHint}}</title>
       </g>
       <g class="svgResultStatus">
         <circle cx="0" cy="0" r="12" :class="'circle-bg '+status"></circle>
@@ -101,18 +101,23 @@ export default {
         this.label.length > maxLength
           ? this.label.substring(0, maxLength) + '...'
           : this.label
+      let width = stringWidth(text)
+      return {
+        x: -width * 2.7,
+        y: -20,
+        text,
+      }
+    },
+    getHint() {
+      let maxLength = 14
       let hint =
         this.hint.length > maxLength
           ? this.hint.substring(0, maxLength) + '...'
           : this.hint
-      let widthText = stringWidth(text)
-      let widthHint = stringWidth(hint)
+      let width = stringWidth(hint)
       return {
-        xText: -widthText * 2.7,
-        yText: -20,
-        text,
-        xHint: -widthHint * 2.7,
-        yHint: 25,
+        x: -width * 2.7,
+        y: 25,
         hint
       }
     },
