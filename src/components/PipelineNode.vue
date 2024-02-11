@@ -127,7 +127,7 @@ export default {
           : this.hint
       let width = stringWidth(hint)
       return {
-        x: -width * 2.7,
+        x: -width * 2.3,
         y: 25,
         hint
       }
