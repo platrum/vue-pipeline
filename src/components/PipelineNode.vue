@@ -9,7 +9,7 @@
         <text :x="getText().x" :y="getText().y" class="pipeline-node-label">{{getText().text}}</text>
         <title>{{label}}</title>
       </g>
-      <g v-if="getHint().hint">
+      <g v-if="getHint().hint && isVisibleHint">
         <text :x="getHint().x" :y="getHint().y" class="pipeline-node-hint">{{getHint().hint}}</text>
         <title v-if="labelHint">{{labelHint}}</title>
       </g>
@@ -87,6 +87,10 @@ export default {
     selected: {
       type: Boolean,
       default: false
+    },
+    isVisibleHint: {
+      type: Boolean,
+      default: false
     }
   },
   data() {
@@ -109,7 +113,14 @@ export default {
       }
     },
     getHint() {
-      let maxLength = 14
+      if (!this.hint) {
+        return {
+          x: 0,
+          y: 0,
+          hint: false,
+        }
+      }
+      let maxLength = 20
       let hint =
         this.hint.length > maxLength
           ? this.hint.substring(0, maxLength) + '...'
