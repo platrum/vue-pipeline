@@ -10,7 +10,7 @@
         <title>{{label}}</title>
       </g>
       <g v-if="getHint().hint && isVisibleHint">
-        <text :x="getHint().x" :y="getHint().y" class="pipeline-node-hint" :class="{ running: status=='running' }">{{getHint().hint}}</text>
+        <text :x="getHint().x" :y="getHint().y" class="pipeline-node-hint" :class="{ active: status=='running' }">{{getHint().hint}}</text>
         <title v-if="labelHint">{{labelHint}}</title>
       </g>
       <g class="svgResultStatus">
@@ -217,7 +217,7 @@ export default {
   position: absolute;
   text-align: center;
 }
-.pipeline-node-hint.running {
+.pipeline-node-hint.active {
   color: #8CCC4F;
   fill: #8CCC4F;
 }
