@@ -10,7 +10,7 @@
         <title>{{label}}</title>
       </g>
       <g v-if="getHint().hint && isVisibleHint">
-        <text :x="getHint().x" :y="getHint().y" class="pipeline-node-hint">{{getHint().hint}}</text>
+        <text :x="getHint().x" :y="getHint().y" class="pipeline-node-hint" :class="{ running: status=='running' }">{{getHint().hint}}</text>
         <title v-if="labelHint">{{labelHint}}</title>
       </g>
       <g class="svgResultStatus">
@@ -117,7 +117,7 @@ export default {
         return {
           x: 0,
           y: 0,
-          hint: false,
+          hint: '',
         }
       }
       let maxLength = 20
@@ -216,8 +216,10 @@ export default {
   overflow-wrap: break-word;
   position: absolute;
   text-align: center;
-  color: #989AB3;
-  fill: #989AB3;
+}
+.pipeline-node-hint.running {
+  color: #8CCC4F;
+  fill: #8CCC4F;
 }
 .running {
   fill: #8ccc4f;
