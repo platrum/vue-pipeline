@@ -9,8 +9,8 @@
         <text :x="getText().x" :y="getText().y" class="pipeline-node-label">{{getText().text}}</text>
         <title>{{label}}</title>
       </g>
-      <g v-if="getHint().hint">
-        <text :x="getHint().x" :y="getHint().y" class="pipeline-node-hint">{{getHint().hint}}</text>
+      <g v-if="getHint().hint && isVisibleHint">
+        <text :x="getHint().x" :y="getHint().y" class="pipeline-node-hint" :class="{ active: status=='running' }">{{getHint().hint}}</text>
         <title v-if="labelHint">{{labelHint}}</title>
       </g>
       <g class="svgResultStatus">
@@ -87,6 +87,10 @@ export default {
     selected: {
       type: Boolean,
       default: false
+    },
+    isVisibleHint: {
+      type: Boolean,
+      default: false
     }
   },
   data() {
@@ -109,14 +113,21 @@ export default {
       }
     },
     getHint() {
-      let maxLength = 14
+      if (!this.hint) {
+        return {
+          x: 0,
+          y: 0,
+          hint: '',
+        }
+      }
+      let maxLength = 20
       let hint =
         this.hint.length > maxLength
           ? this.hint.substring(0, maxLength) + '...'
           : this.hint
       let width = stringWidth(hint)
       return {
-        x: -width * 2.7,
+        x: -width * 2.3,
         y: 25,
         hint
       }
@@ -205,8 +216,10 @@ export default {
   overflow-wrap: break-word;
   position: absolute;
   text-align: center;
-  color: #989AB3;
-  fill: #989AB3;
+}
+.pipeline-node-hint.active {
+  color: #8CCC4F;
+  fill: #8CCC4F;
 }
 .running {
   fill: #8ccc4f;
