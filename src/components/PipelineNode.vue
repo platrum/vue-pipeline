@@ -125,9 +125,9 @@ export default {
         this.hint.length > maxLength
           ? this.hint.substring(0, maxLength) + '...'
           : this.hint
-      let width = stringWidth(hint)
+      let width = this.getTextWidth(hint, "10px sans-serif")
       return {
-        x: -width * 2.2,
+        x: -width / 2,
         y: 25,
         hint
       }
