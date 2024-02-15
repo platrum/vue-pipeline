@@ -51,7 +51,6 @@
   </g>
 </template>
 <script>
-import stringWidth from 'string-width'
 import PipelineNodeStart from './PipelineNodeStart'
 import PipelineNodeEnd from './PipelineNodeEnd'
 export default {
@@ -105,9 +104,9 @@ export default {
         this.label.length > maxLength
           ? this.label.substring(0, maxLength) + '...'
           : this.label
-      let width = stringWidth(text)
+      let width = this.getTextWidth(text, '12px PT Root UI')
       return {
-        x: -width * 2.7,
+        x: -width / 2,
         y: -20,
         text,
       }
@@ -125,9 +124,9 @@ export default {
         this.hint.length > maxLength
           ? this.hint.substring(0, maxLength) + '...'
           : this.hint
-      let width = stringWidth(hint)
+      let width = this.getTextWidth(hint, '10px PT Root UI')
       return {
-        x: -width * 2.3,
+        x: -width / 2,
         y: 25,
         hint
       }
