@@ -30,7 +30,7 @@
       :node="item"
       :index="idx"
       :selected="selectedList[idx]"
-      :circleColor="item.color"
+      :nodeColor="item.color"
       @click="handleClick"
       @mouseenter="handleMouseEnter"
       @mouseleave="handleMouseLeave"
@@ -86,6 +86,14 @@ export default {
     },
     linesColorData: Array,
     stepsColorData: Array,
+    startLineColor: {
+      type: String,
+      default: '#E4E5EC'
+    },
+    startNodeColor: {
+      type: String,
+      default: '#E4E5EC'
+    },
     colored: {
       type: Boolean,
       default: false,
@@ -142,19 +150,35 @@ export default {
       this.lineList = this.service.getLines();
       if (this.colored) {
         this.getColorNodeList();
+        this.getColorLinesList();
       }
       this.width = this.service.width;
       this.height = this.service.height;
     },
     getColorNodeList() {
       this.nodeList.forEach(node => {
+        if (node.step_key === 'start') {
+          node.color = this.startNodeColor;
+        }
         this.stepsColorData.forEach(step => {
           if (node.step_key === step.step_key) {
             node.color = step.color;
           }
         })
       });
-    }
+    },
+    getColorLinesList() {
+      this.lineList.forEach((line, lineIndex) => {
+        if (lineIndex === 0) {
+          line.color = this.startLineColor;
+        }
+        this.linesColorData.forEach((coloredLine, coloredLineIndex) => {
+          if (coloredLineIndex + 1 === lineIndex) {
+            line.color = coloredLine.color;
+          }
+        })
+      })
+    },
   },
   mounted() {
     this.render();

@@ -1,7 +1,7 @@
 <template>
   <g :transform="'translate('+x+','+y+')'" :class="nodeClass" cursor="pointer" @click="handleClick" @mouseenter="handleMouseEnter" @mouseleave="handleMouseLeave">
 
-    <pipeline-node-start v-if="status=='start'" :label="label" />
+    <pipeline-node-start v-if="status=='start'" :label="label" :nodeColor="nodeColor"/>
     <pipeline-node-end v-if="status=='end'" :label="label" />
 
     <g v-if="status!=='start' && status!=='end'">
@@ -14,7 +14,7 @@
         <title v-if="labelHint">{{labelHint}}</title>
       </g>
       <g class="svgResultStatus">
-        <circle cx="0" cy="0" r="12" :class="'circle-bg '+status" :style="getCircleStyle()"></circle>
+        <circle cx="0" cy="0" r="12" :class="'circle-bg '+status" :style="getNodeStyle()"></circle>
         <g class="result-status-glyph">
           <polygon fill="white" v-if="status=='failure'"
             points="4.67 -3.73 3.73 -4.67 0 -0.94 -3.73 -4.67 -4.67 -3.73 -0.94 0 -4.67 3.73 -3.73 4.67 0 0.94 3.73 4.67 4.67 3.73 0.94 0">
@@ -91,7 +91,7 @@ export default {
       type: Boolean,
       default: false
     },
-    circleColor: String,
+    nodeColor: String,
   },
   data() {
     return {
@@ -157,11 +157,10 @@ export default {
       var metrics = context.measureText(text)
       return metrics.width
     },
-    getCircleStyle() {
-      if (this.circleColor) {
+    getNodeStyle() {
+      if (this.nodeColor) {
         return {
-          stroke: this.circleColor,
-          fill: this.circleColor,
+          fill: this.nodeColor,
         }
       }
     },
