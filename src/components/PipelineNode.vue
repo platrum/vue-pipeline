@@ -6,7 +6,7 @@
 
     <g v-if="status!=='start' && status!=='end'">
       <g>
-        <text :x="getText().x" :y="getText().y" class="pipeline-node-label">{{getText().text}}</text>
+        <text :x="getText().x" :y="getText().y" class="pipeline-node-label" :class="{'label-shadow': nodeColor}">{{getText().text}}</text>
         <title>{{label}}</title>
       </g>
       <g v-if="getHint().hint && isVisibleHint">
@@ -232,5 +232,8 @@ export default {
   fill: #8ccc4f;
   animation: rotating 2s linear infinite;
   animation-iteration-count: infinite;
+}
+.label-shadow {
+  text-shadow: 0 2px 8px rgba(255, 255, 255, 0.75);
 }
 </style>

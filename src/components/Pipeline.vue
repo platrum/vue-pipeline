@@ -162,24 +162,24 @@ export default {
       this.nodeList.forEach(node => {
         if (node.step_key === 'start') {
           node.color = this.startNodeColor;
+          return;
         }
-        this.stepsColorData.forEach(step => {
-          if (node.step_key === step.step_key) {
-            node.color = step.color;
-          }
-        })
+        const coloredStepData = this.stepsColorData.find(step => step.step_key === node.step_key);
+        if (coloredStepData !== undefined) {
+          node.color = coloredStepData.color;
+        }
       });
     },
     getColorLinesList() {
-      this.lineList.forEach((line, lineIndex) => {
-        if (lineIndex === 0) {
-          line.color = this.startLineColor;
+      this.lineList.forEach(line => {
+        if (line.from.step_key === 'start') {
+          line.color = this.startNodeColor;
+          return;
         }
-        this.linesColorData.forEach((coloredLine, coloredLineIndex) => {
-          if (coloredLineIndex + 1 === lineIndex) {
-            line.color = coloredLine.color;
-          }
-        })
+        const coloredLineData = this.linesColorData.find(item => (item.from_step_key === line.from.step_key && item.to_step_key === line.to.step_key));
+        if (coloredLineData !== undefined) {
+          line.color = coloredLineData.color;
+        }
       })
     },
     clearNodeListColor() {

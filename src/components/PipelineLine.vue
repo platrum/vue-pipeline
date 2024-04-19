@@ -47,7 +47,6 @@ export default {
     getLineStyle() {
       if (this.lineColor) {
         return {
-          fill: this.lineColor,
           stroke: this.lineColor,
         }
       }
