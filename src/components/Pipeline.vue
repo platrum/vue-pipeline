@@ -83,6 +83,12 @@ export default {
     isVisibleHint: {
       type: Boolean,
       default: false
+    },
+    linesColorData: Array,
+    stepsColorData: Array,
+    colored: {
+      type: Boolean,
+      default: false,
     }
   },
   data() {
@@ -134,8 +140,20 @@ export default {
       // this.service.optimize();
       this.nodeList = this.service.nodes;
       this.lineList = this.service.getLines();
+      if (this.colored) {
+        this.getColorNodeList();
+      }
       this.width = this.service.width;
       this.height = this.service.height;
+    },
+    getColorNodeList() {
+      this.nodeList.forEach(node => {
+        this.stepsColorData.forEach(step => {
+          if (node.step_key === step.step_key) {
+            node.color = step.color;
+          }
+        })
+      });
     }
   },
   mounted() {
