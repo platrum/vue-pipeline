@@ -8,11 +8,32 @@
       </marker>
     </defs>
 
-    <pipeline-line v-for="(item,index) in lineList" :key="'line'+index" :showArrow="showArrow" :path="item.path"
-      :weight="item.weight" :lineStyle="lineStyle" :lineColor="item.color"/>
-    <pipeline-node v-for="(item,idx) in nodeList" :key="'node'+idx" :hint="item.hint" :status="item.status" :is-visible-hint="isVisibleHint"
-      :label="item.name" :label-hint="item.labelHint" :x="item.x" :y="item.y" :node="item" :index="idx" :selected="selectedList[idx]"
-      @click="handleClick" @mouseenter="handleMouseEnter" @mouseleave="handleMouseLeave"/>
+    <pipeline-line
+      v-for="(item,index) in lineList"
+      :key="'line'+index"
+      :showArrow="showArrow"
+      :path="item.path"
+      :weight="item.weight"
+      :lineStyle="lineStyle"
+      :lineColor="item.color"
+    />
+    <pipeline-node
+      v-for="(item,idx) in nodeList"
+      :key="'node'+idx"
+      :hint="item.hint"
+      :status="item.status"
+      :is-visible-hint="isVisibleHint"
+      :label="item.name"
+      :label-hint="item.labelHint"
+      :x="item.x"
+      :y="item.y"
+      :node="item"
+      :index="idx"
+      :selected="selectedList[idx]"
+      @click="handleClick"
+      @mouseenter="handleMouseEnter"
+      @mouseleave="handleMouseLeave"
+    />
   </svg>
 </template>
 <script>
