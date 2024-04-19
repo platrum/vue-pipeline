@@ -151,6 +151,9 @@ export default {
       if (this.colored) {
         this.getColorNodeList();
         this.getColorLinesList();
+      } else {
+        this.clearNodeListColor();
+        this.clearLinesListColor();
       }
       this.width = this.service.width;
       this.height = this.service.height;
@@ -178,6 +181,20 @@ export default {
           }
         })
       })
+    },
+    clearNodeListColor() {
+      this.nodeList.forEach(node => {
+        if (node.hasOwnProperty('color')) {
+          delete node.color;
+        }
+      });
+    },
+    clearLinesListColor() {
+      this.lineList.forEach(line => {
+        if (line.hasOwnProperty('color')) {
+          delete line.color;
+        }
+      });
     },
   },
   mounted() {
