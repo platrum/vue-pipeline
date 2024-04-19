@@ -30,6 +30,7 @@
       :node="item"
       :index="idx"
       :selected="selectedList[idx]"
+      :circleColor="item.color"
       @click="handleClick"
       @mouseenter="handleMouseEnter"
       @mouseleave="handleMouseLeave"

@@ -14,7 +14,7 @@
         <title v-if="labelHint">{{labelHint}}</title>
       </g>
       <g class="svgResultStatus">
-        <circle cx="0" cy="0" r="12" :class="'circle-bg '+status"></circle>
+        <circle cx="0" cy="0" r="12" :class="'circle-bg '+status" :style="getCircleStyle()"></circle>
         <g class="result-status-glyph">
           <polygon fill="white" v-if="status=='failure'"
             points="4.67 -3.73 3.73 -4.67 0 -0.94 -3.73 -4.67 -4.67 -3.73 -0.94 0 -4.67 3.73 -3.73 4.67 0 0.94 3.73 4.67 4.67 3.73 0.94 0">
@@ -90,7 +90,8 @@ export default {
     isVisibleHint: {
       type: Boolean,
       default: false
-    }
+    },
+    circleColor: String,
   },
   data() {
     return {
@@ -155,7 +156,15 @@ export default {
       context.font = font
       var metrics = context.measureText(text)
       return metrics.width
-    }
+    },
+    getCircleStyle() {
+      if (this.circleColor) {
+        return {
+          stroke: this.circleColor,
+          fill: this.circleColor,
+        }
+      }
+    },
   }
 }
 </script>
