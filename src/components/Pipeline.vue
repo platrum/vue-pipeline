@@ -8,11 +8,33 @@
       </marker>
     </defs>
 
-    <pipeline-line v-for="(item,index) in lineList" :key="'line'+index" :showArrow="showArrow" :path="item.path"
-      :weight="item.weight" :lineStyle="lineStyle" />
-    <pipeline-node v-for="(item,idx) in nodeList" :key="'node'+idx" :hint="item.hint" :status="item.status" :is-visible-hint="isVisibleHint"
-      :label="item.name" :label-hint="item.labelHint" :x="item.x" :y="item.y" :node="item" :index="idx" :selected="selectedList[idx]"
-      @click="handleClick" @mouseenter="handleMouseEnter" @mouseleave="handleMouseLeave"/>
+    <pipeline-line
+      v-for="(item,index) in lineList"
+      :key="'line'+index"
+      :showArrow="showArrow"
+      :path="item.path"
+      :weight="item.weight"
+      :lineStyle="lineStyle"
+      :lineColor="item.color"
+    />
+    <pipeline-node
+      v-for="(item,idx) in nodeList"
+      :key="'node'+idx"
+      :hint="item.hint"
+      :status="item.status"
+      :is-visible-hint="isVisibleHint"
+      :label="item.name"
+      :label-hint="item.labelHint"
+      :x="item.x"
+      :y="item.y"
+      :node="item"
+      :index="idx"
+      :selected="selectedList[idx]"
+      :nodeColor="item.color"
+      @click="handleClick"
+      @mouseenter="handleMouseEnter"
+      @mouseleave="handleMouseLeave"
+    />
   </svg>
 </template>
 <script>
@@ -61,6 +83,20 @@ export default {
     isVisibleHint: {
       type: Boolean,
       default: false
+    },
+    linesColorData: Array,
+    stepsColorData: Array,
+    startLineColor: {
+      type: String,
+      default: '#E4E5EC'
+    },
+    startNodeColor: {
+      type: String,
+      default: '#E4E5EC'
+    },
+    colored: {
+      type: Boolean,
+      default: false,
     }
   },
   data() {
@@ -112,9 +148,54 @@ export default {
       // this.service.optimize();
       this.nodeList = this.service.nodes;
       this.lineList = this.service.getLines();
+      if (this.colored) {
+        this.getColorNodeList();
+        this.getColorLinesList();
+      } else {
+        this.clearNodeListColor();
+        this.clearLinesListColor();
+      }
       this.width = this.service.width;
       this.height = this.service.height;
-    }
+    },
+    getColorNodeList() {
+      this.nodeList.forEach(node => {
+        if (node.step_key === 'start') {
+          node.color = this.startNodeColor;
+          return;
+        }
+        const coloredStepData = this.stepsColorData.find(step => step.step_key === node.step_key);
+        if (coloredStepData !== undefined) {
+          node.color = coloredStepData.color;
+        }
+      });
+    },
+    getColorLinesList() {
+      this.lineList.forEach(line => {
+        if (line.from.step_key === 'start') {
+          line.color = this.startNodeColor;
+          return;
+        }
+        const coloredLineData = this.linesColorData.find(item => (item.from_step_key === line.from.step_key && item.to_step_key === line.to.step_key));
+        if (coloredLineData !== undefined) {
+          line.color = coloredLineData.color;
+        }
+      })
+    },
+    clearNodeListColor() {
+      this.nodeList.forEach(node => {
+        if (node.hasOwnProperty('color')) {
+          delete node.color;
+        }
+      });
+    },
+    clearLinesListColor() {
+      this.lineList.forEach(line => {
+        if (line.hasOwnProperty('color')) {
+          delete line.color;
+        }
+      });
+    },
   },
   mounted() {
     this.render();

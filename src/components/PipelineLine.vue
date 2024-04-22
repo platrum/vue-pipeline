@@ -1,6 +1,6 @@
 <template>
   <g :class="'pipeline-line '+'weight'+weight ">
-    <path stroke-width="3.5" :d="this.path" fill="none" :marker-end="getMarkerEnd()"> </path>
+    <path stroke-width="3.5" :d="this.path" fill="none" :marker-end="getMarkerEnd()" :style="getLineStyle()"> </path>
   </g>
 </template>
 
@@ -17,7 +17,8 @@ export default {
     showArrow: {
       type: Boolean,
       default: false
-    }
+    },
+    lineColor: String,
   },
   data() {
     return {
@@ -41,6 +42,13 @@ export default {
           return "#8cc04f";
         default:
           break;
+      }
+    },
+    getLineStyle() {
+      if (this.lineColor) {
+        return {
+          stroke: this.lineColor,
+        }
       }
     }
   }

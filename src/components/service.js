@@ -102,6 +102,8 @@ class Pipeline {
         let edge = node.next[j];
         let child = this.nodes[edge.index];
         list.push({
+          from: node,
+          to: child,
           path: drawService.drawEdge(node, child),
           weight: edge.weight,
         });
@@ -111,7 +113,7 @@ class Pipeline {
     return list;
   }
 
-  
+
   getPositionInMatrix(index) {
     for (let i = 0; i < this.matrix.length; i++) {
       for (let j = 0; j < this.matrix[i].length; j++) {

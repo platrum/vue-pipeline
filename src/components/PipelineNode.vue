@@ -1,12 +1,12 @@
 <template>
   <g :transform="'translate('+x+','+y+')'" :class="nodeClass" cursor="pointer" @click="handleClick" @mouseenter="handleMouseEnter" @mouseleave="handleMouseLeave">
 
-    <pipeline-node-start v-if="status=='start'" :label="label" />
+    <pipeline-node-start v-if="status=='start'" :label="label" :nodeColor="nodeColor"/>
     <pipeline-node-end v-if="status=='end'" :label="label" />
 
     <g v-if="status!=='start' && status!=='end'">
       <g>
-        <text :x="getText().x" :y="getText().y" class="pipeline-node-label">{{getText().text}}</text>
+        <text :x="getText().x" :y="getText().y" class="pipeline-node-label" :class="{'label-shadow': nodeColor}">{{getText().text}}</text>
         <title>{{label}}</title>
       </g>
       <g v-if="getHint().hint && isVisibleHint">
@@ -14,7 +14,7 @@
         <title v-if="labelHint">{{labelHint}}</title>
       </g>
       <g class="svgResultStatus">
-        <circle cx="0" cy="0" r="12" :class="'circle-bg '+status"></circle>
+        <circle cx="0" cy="0" r="12" :class="'circle-bg '+status" :style="getNodeStyle()"></circle>
         <g class="result-status-glyph">
           <polygon fill="white" v-if="status=='failure'"
             points="4.67 -3.73 3.73 -4.67 0 -0.94 -3.73 -4.67 -4.67 -3.73 -0.94 0 -4.67 3.73 -3.73 4.67 0 0.94 3.73 4.67 4.67 3.73 0.94 0">
@@ -90,7 +90,8 @@ export default {
     isVisibleHint: {
       type: Boolean,
       default: false
-    }
+    },
+    nodeColor: String,
   },
   data() {
     return {
@@ -155,7 +156,14 @@ export default {
       context.font = font
       var metrics = context.measureText(text)
       return metrics.width
-    }
+    },
+    getNodeStyle() {
+      if (this.nodeColor) {
+        return {
+          fill: this.nodeColor,
+        }
+      }
+    },
   }
 }
 </script>
@@ -224,5 +232,8 @@ export default {
   fill: #8ccc4f;
   animation: rotating 2s linear infinite;
   animation-iteration-count: infinite;
+}
+.label-shadow {
+  text-shadow: 0 2px 8px rgba(255, 255, 255, 0.75);
 }
 </style>
