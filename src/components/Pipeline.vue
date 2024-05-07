@@ -176,11 +176,17 @@ export default {
           line.color = this.startNodeColor;
           return;
         }
-        const coloredLineData = this.linesColorData.find(item => (item.from_step_key === line.from.step_key && item.to_step_key === line.to.step_key));
+        const coloredLineData = this.getColoredLineData(line);
         if (coloredLineData !== undefined) {
           line.color = coloredLineData.color;
         }
       })
+    },
+    getColoredLineData(line) {
+      const coloredLineData = this.linesColorData.find(item => (item.from_step_key === line.from.step_key && item.to_step_key === line.to.step_key));
+      const reversedColoredLineData = this.linesColorData.find(item => (item.to_step_key === line.from.step_key && item.from_step_key === line.to.step_key));
+
+      return coloredLineData === undefined ? reversedColoredLineData : coloredLineData;
     },
     clearNodeListColor() {
       this.nodeList.forEach(node => {
