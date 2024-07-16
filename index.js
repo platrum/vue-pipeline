@@ -4,7 +4,6 @@
 
 // BASE COMPONENTS
 import VuePipeline from "./src/components/Pipeline.vue"
-import ElementUI from "element-ui";
 
 /**************************************************************************
  * ENVIRONMENT CONFIGURATIONS
@@ -19,7 +18,6 @@ function install(Vue, options) {
   }
 
   // Declare the component
-  Vue.use(ElementUI);
   Vue.component("vue-pipeline", VuePipeline)
 }
 

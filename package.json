@@ -42,8 +42,7 @@
     }
   },
   "dependencies": {
-    "string-width": "^4.2.0",
-    "element-ui": "^2.0.9"
+    "string-width": "^4.2.0"
   },
   "devDependencies": {
     "@babel/register": "^7.7.4",
