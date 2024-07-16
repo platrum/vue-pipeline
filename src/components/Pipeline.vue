@@ -35,22 +35,17 @@
       @mouseenter="handleMouseEnter"
       @mouseleave="handleMouseLeave"
     />
-    <Popover>
-      TEST
-    </Popover>
   </svg>
 </template>
 <script>
 import PipelineNode from "./PipelineNode";
 import PipelineLine from "./PipelineLine";
 import { Pipeline } from "./service";
-import { Popover } from "element-ui";
 
 export default {
   components: {
     PipelineNode,
-    PipelineLine,
-    Popover,
+    PipelineLine
   },
   props: {
     // 第一个点的起始位置
