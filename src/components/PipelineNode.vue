@@ -4,7 +4,7 @@
     <pipeline-node-start v-if="status=='start'" :label="label" :nodeColor="nodeColor"/>
     <pipeline-node-end v-if="status=='end'" :label="label" />
 
-    <g v-if="status!=='start' && status!=='end'">
+    <g v-if="status!=='start' && status!=='end'" ref="nodeRef">
       <g>
         <text :x="getText().x" :y="getText().y" class="pipeline-node-label" :class="{'label-shadow': nodeColor}">{{getText().text}}</text>
         <title>{{label}}</title>
@@ -38,6 +38,14 @@
             p-id="10371"></path>
         </g>
       </g>
+      <el-popover
+        ref="nodeRef"
+        :virtual-ref="nodeRef"
+        trigger="hover"
+        title="TEST"
+        virtual-triggering
+      >
+      </el-popover>
     </g>
 
     <!-- high light -->
@@ -53,10 +61,11 @@
 <script>
 import PipelineNodeStart from './PipelineNodeStart'
 import PipelineNodeEnd from './PipelineNodeEnd'
+
 export default {
   components: {
     PipelineNodeStart,
-    PipelineNodeEnd
+    PipelineNodeEnd,
   },
   props: {
     index: {
@@ -95,7 +104,8 @@ export default {
   },
   data() {
     return {
-      nodeClass: 'pipeline-node'
+      nodeClass: 'pipeline-node',
+      nodeRef: null,
     }
   },
   methods: {
