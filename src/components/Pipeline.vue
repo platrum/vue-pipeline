@@ -126,8 +126,8 @@ export default {
       this.selectedList[index] = true;
       this.$emit("select", node);
     },
-    handleMouseEnter(index, node) {
-      this.$emit("mouseenter", node);
+    handleMouseEnter(index, node, rect) {
+      this.$emit("mouseenter", node, rect);
     },
     handleMouseLeave(index, node) {
       this.$emit("mouseleave", node);

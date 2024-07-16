@@ -13,7 +13,7 @@
         <text :x="getHint().x" :y="getHint().y" class="pipeline-node-hint" :class="{ active: status=='running' }">{{getHint().hint}}</text>
         <title v-if="labelHint">{{labelHint}}</title>
       </g>
-      <g class="svgResultStatus">
+      <g class="svgResultStatus" :id="`node-${index}`">
         <circle cx="0" cy="0" r="12" :class="'circle-bg '+status" :style="getNodeStyle()"></circle>
         <g class="result-status-glyph">
           <polygon fill="white" v-if="status=='failure'"
@@ -141,7 +141,11 @@ export default {
     },
     handleMouseEnter() {
       this.nodeClass = 'pipeline-node-selected'
-      this.$emit('mouseenter', this.index, this.node)
+      let rect = null;
+      if (this.status!=='start' && this.status!=='end') {
+        rect = document.getElementById(`node-${this.index}`).getBoundingClientRect();
+      }
+      this.$emit('mouseenter', this.index, this.node, rect)
     },
     handleMouseLeave() {
       this.nodeClass = 'pipeline-node'
