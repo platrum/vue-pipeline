@@ -170,20 +170,69 @@ class Pipeline {
   }
 
   calCoordinateForMatrix() {
+    const nodes = JSON.parse(JSON.stringify(this.nodes));
+
     for (let i = 0; i < this.matrix.length; i++) {
       for (let j = 0; j < this.matrix.length; j++) {
         let index = this.matrix[i][j];
-        if (index != undefined) {
-          this.nodes[index].x = this.startx + this.xstep * j;
-          this.nodes[index].y = this.starty + this.ystep * i;
-          this.width = Math.max(this.width, this.nodes[index].x + this.startx);
+        if (index !== undefined) {
+          nodes[index].x = this.startx + this.xstep * j;
+          nodes[index].y = this.starty + this.ystep * i;
+          this.width = Math.max(this.width, nodes[index].x + this.startx);
           this.height = Math.max(
             this.height,
-            this.nodes[index].y + this.starty
+            nodes[index].y + this.starty
           );
         }
       }
     }
+
+    const breakedNodes = nodes.filter(node => node.x === undefined || node.y === undefined);
+
+    if (breakedNodes.length > 0) {
+      this.fixBreakingNodes(breakedNodes, nodes);
+    }
+
+    this.nodes = JSON.parse(JSON.stringify(nodes));
+  }
+
+  fixBreakingNodes(breakedNodes, nodes) {
+    breakedNodes.forEach(breakedNode => {
+      let fatherIndex = this.findSolvedFather(breakedNode.index);
+      let [y, x] = this.getPositionInMatrix(fatherIndex);
+      let startx = x + 1;
+
+      let starty = y;
+      while (nodes[starty][startx]) {
+        starty++;
+      }
+
+      const nextSlotAvailable = this.matrix[starty][startx + 1] === undefined && startx + 1 < this.matrix[starty].length;
+      const nextSlotInNextRowAvailable = startx + 1 < this.matrix[starty].length && this.matrix[starty + 1][startx + 1] === undefined;
+
+      //Если следующий слот в следующей строке свободен - ставит в него
+      if (nextSlotInNextRowAvailable) {
+        return this.setNodeFixedPosition(nodes, breakedNode.index, starty + 1, startx + 1);
+      }
+
+      // // Если следующий слот в строке свободен - ставит в него
+      if (nextSlotAvailable) {
+        return this.setNodeFixedPosition(nodes, breakedNode.index, starty, startx + 1);
+      }
+
+      // Если оба слота заняты - ставит в ближайшую следующую пустую строку на тот же x слот
+      const rowIndex = this.matrix.findIndex(row => row[startx] === undefined);
+      if (rowIndex !== -1) {
+        return this.setNodeFixedPosition(nodes, breakedNode.index, rowIndex, startx);
+      }
+    })
+  }
+
+  setNodeFixedPosition(nodes, nodeIndex, starty, startx) {
+    this.matrix[starty][startx] = nodeIndex;
+    const foundedNode = nodes.find(node => node.index === nodeIndex);
+    foundedNode.y = this.starty + this.ystep * starty;
+    foundedNode.x = this.startx + this.xstep * startx;
   }
 
   /**
