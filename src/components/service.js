@@ -292,7 +292,7 @@ class Pipeline {
   findSolvedFather(index) {
     let list = this.findParents(index);
     if (list.length == 0) {
-      return null;
+      return this.findFatherInNextStep(index);
     }
     for (let i = 0; i < list.length; i++) {
       if (this.solvedList[list[i]]) {
@@ -301,6 +301,23 @@ class Pipeline {
         return this.findSolvedFather(list[i]);
       }
     }
+  }
+
+  /**
+   * Находит родителя среди своих next, используется если сделана обратная связка шагов
+   * @param index
+   * @returns {number | null}
+   */
+
+  findFatherInNextStep(index) {
+    const step = this.nodes[index];
+    let fatherStep = null;
+    step.next.forEach(nextStep => {
+      if (this.solvedList[nextStep.index]) {
+        fatherStep = nextStep.index;
+      }
+    });
+    return fatherStep;
   }
 
   /**
