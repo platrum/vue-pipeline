@@ -130,10 +130,10 @@ export default {
       this.$emit("select", node);
     },
     handleStepMouseEnter(node, rect) {
-      this.$emit("mouseenter", node, rect);
+      this.$emit("step-mouseenter", node, rect);
     },
     handleStepMouseLeave(node) {
-      this.$emit("mouseleave", node);
+      this.$emit("step-mouseleave", node);
     },
     render() {
       this.service = new Pipeline(
