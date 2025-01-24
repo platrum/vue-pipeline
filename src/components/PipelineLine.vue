@@ -1,5 +1,5 @@
 <template>
-  <g :class="'pipeline-line '+'weight'+weight ">
+  <g :class="'pipeline-line '+'weight'+weight " @mouseenter="handleMouseEnter" @mouseleave="handleMouseLeave">
     <path stroke-width="3.5" :d="this.path" fill="none" :marker-end="getMarkerEnd()" :style="getLineStyle()"> </path>
   </g>
 </template>
@@ -19,6 +19,12 @@ export default {
       default: false
     },
     lineColor: String,
+    lineData: {
+      type: Object,
+      default() {
+        return {}
+      }
+    },
   },
   data() {
     return {
@@ -50,7 +56,31 @@ export default {
           stroke: this.lineColor,
         }
       }
-    }
+    },
+    handleMouseEnter(e) {
+      if (this.lineData.from.status === 'start') {
+        return;
+      }
+      const positionCoords  = {
+        layerX: e.layerX,
+        layerY: e.layerY,
+        offsetX: e.offsetX,
+        offsetY: e.offsetY,
+        pageX: e.pageX,
+        pageY: e.pageY,
+        x: e.x,
+        y: e.y,
+      };
+      this.$emit('mouseenter', {
+        lineData: this.lineData,
+        position: positionCoords,
+      });
+    },
+    handleMouseLeave() {
+      this.$emit('mouseleave', {
+        lineData: this.lineData,
+      });
+    },
   }
 };
 </script>

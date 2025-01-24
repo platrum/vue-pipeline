@@ -16,6 +16,9 @@
       :weight="item.weight"
       :lineStyle="lineStyle"
       :lineColor="item.color"
+      :lineData="item"
+      @mouseenter="$emit('line-mouseenter', $event)"
+      @mouseleave="$emit('line-mouseleave', $event)"
     />
     <pipeline-node
       v-for="(item,idx) in nodeList"
@@ -32,8 +35,8 @@
       :selected="selectedList[idx]"
       :nodeColor="item.color"
       @click="handleClick"
-      @mouseenter="handleMouseEnter"
-      @mouseleave="handleMouseLeave"
+      @mouseenter="handleStepMouseEnter"
+      @mouseleave="handleStepMouseLeave"
     />
   </svg>
 </template>
@@ -126,10 +129,10 @@ export default {
       this.selectedList[index] = true;
       this.$emit("select", node);
     },
-    handleMouseEnter(index, node, rect) {
+    handleStepMouseEnter(node, rect) {
       this.$emit("mouseenter", node, rect);
     },
-    handleMouseLeave(index, node) {
+    handleStepMouseLeave(node) {
       this.$emit("mouseleave", node);
     },
     render() {

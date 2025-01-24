@@ -145,11 +145,11 @@ export default {
       if (this.status!=='start' && this.status!=='end') {
         rect = document.getElementById(`node-${this.index}`).getBoundingClientRect();
       }
-      this.$emit('mouseenter', this.index, this.node, rect)
+      this.$emit('mouseenter', this.node, rect)
     },
     handleMouseLeave() {
       this.nodeClass = 'pipeline-node'
-      this.$emit('mouseleave', this.index, this.node)
+      this.$emit('mouseleave', this.node)
     },
     getTextWidth(text, font) {
       // re-use canvas object for better performance
