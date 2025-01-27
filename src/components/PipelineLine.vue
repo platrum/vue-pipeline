@@ -14,7 +14,7 @@
       :d="this.path"
       fill="none"
       :marker-end="getMarkerEnd()"
-      :style="{opacity: 0, 'pointer-events': 'visible', 'cursor': 'pointer'}"
+      :style="lineClickZoneStyle"
       @mouseenter="handleMouseEnter"
       @mouseleave="handleMouseLeave"
     />
@@ -39,8 +39,12 @@ export default {
     lineData: {
       type: Object,
       default() {
-        return {}
+        return {};
       }
+    },
+    canHoverLines: {
+      type: Boolean,
+      default: false
     },
   },
   data() {
@@ -48,6 +52,15 @@ export default {
       ystep: this.y1 + 30,
       isHovered: false,
     };
+  },
+  computed: {
+    lineClickZoneStyle() {
+      return {
+        opacity: 0,
+        'pointer-events': 'visible',
+        cursor: this.canHoverLines ? 'pointer' : 'default',
+      }
+    }
   },
   methods: {
     getMarkerEnd() {
@@ -79,7 +92,7 @@ export default {
       }
     },
     handleMouseEnter(e) {
-      if (this.lineData.from.status === 'start') {
+      if (this.lineData.from.status === 'start' || !this.canHoverLines) {
         return;
       }
       const node = document.getElementById(this.path).getBBox();
@@ -107,27 +120,6 @@ export default {
       });
       this.isHovered = false;
     },
-    getYCoordinate(layerY, nodeY, y, nodeHeight) {
-      if (layerY === nodeY) {
-        return y + nodeHeight;
-      }
-      if (layerY - nodeY > 0) {
-        const diff = layerY - nodeY;
-        if (nodeHeight > 0) {
-          return y - diff + nodeHeight;
-        }
-
-        return y - diff;
-      }
-      if (nodeY - layerY > 0) {
-        const diff = nodeY - layerY;
-        if (nodeHeight > 0) {
-          return y + (nodeHeight - diff);
-        }
-
-        return y + diff;
-      }
-    },
   }
 };
 </script>
@@ -136,10 +128,8 @@ export default {
   stroke: #949393;
 }
 
-.pipeline-line {
-  transition: 0.2s filter linear;
-}
 .line-hovered {
-  filter: brightness(0.65);
+  transition: 0.3s filter linear;
+  filter: brightness(0.7);
 }
 </style>

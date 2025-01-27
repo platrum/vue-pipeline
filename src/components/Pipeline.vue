@@ -17,6 +17,7 @@
       :lineStyle="lineStyle"
       :lineColor="item.color"
       :lineData="item"
+      :can-hover-lines="canHoverLines"
       @mouseenter="handleLineMouseEnter"
       @mouseleave="$emit('line-mouseleave', $event)"
     />
@@ -99,6 +100,10 @@ export default {
       default: '#E4E5EC'
     },
     colored: {
+      type: Boolean,
+      default: false,
+    },
+    canHoverLines: {
       type: Boolean,
       default: false,
     }
