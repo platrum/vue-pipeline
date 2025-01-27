@@ -1,5 +1,5 @@
 <template>
-  <g :transform="'translate('+x+','+y+')'" :class="nodeClass" cursor="pointer" @click="handleClick" @mouseenter="handleMouseEnter" @mouseleave="handleMouseLeave">
+  <g :transform="'translate('+x+','+y+')'" :class="nodeClass" :cursor="canHoverSteps ? 'pointer' : 'default'" @click="handleClick" @mouseenter="handleMouseEnter" @mouseleave="handleMouseLeave">
 
     <pipeline-node-start v-if="status=='start'" :label="label" :nodeColor="nodeColor"/>
     <pipeline-node-end v-if="status=='end'" :label="label" />
@@ -17,7 +17,7 @@
         <circle cx="0" cy="0" r="12" :class="'circle-bg '+status" :style="getNodeStyle()"></circle>
         <g class="result-status-glyph">
           <polygon fill="white" v-if="status=='failure'"
-            points="4.67 -3.73 3.73 -4.67 0 -0.94 -3.73 -4.67 -4.67 -3.73 -0.94 0 -4.67 3.73 -3.73 4.67 0 0.94 3.73 4.67 4.67 3.73 0.94 0">
+                   points="4.67 -3.73 3.73 -4.67 0 -0.94 -3.73 -4.67 -4.67 -3.73 -0.94 0 -4.67 3.73 -3.73 4.67 0 0.94 3.73 4.67 4.67 3.73 0.94 0">
           </polygon>
         </g>
         <g class="result-status-glyph" v-if="status=='success'">
@@ -34,8 +34,8 @@
         </g>
         <g class="result-status-glyph running" v-if="status=='running'">
           <path transform="scale(0.03 0.03) translate(-514,-510)"
-            d="M604.16 1003.52V898.458A410.317 410.317 0 0 0 898.458 604.16h105.062a512.614 512.614 0 0 1-399.36 399.36z m-204.8 0A512.614 512.614 0 0 1 0 604.16h105.062A410.317 410.317 0 0 0 399.36 898.458v105.062z m204.8-898.458V0a512.614 512.614 0 0 1 399.36 399.36H898.458A410.317 410.317 0 0 0 604.16 105.062z m-204.8 0A410.317 410.317 0 0 0 105.062 399.36H0A512.614 512.614 0 0 1 399.36 0v105.062zM512 665.6a153.6 153.6 0 1 0 0-307.2 153.6 153.6 0 0 0 0 307.2z m0 102.4a256 256 0 1 1 0-512 256 256 0 0 1 0 512z"
-            p-id="10371"></path>
+                d="M604.16 1003.52V898.458A410.317 410.317 0 0 0 898.458 604.16h105.062a512.614 512.614 0 0 1-399.36 399.36z m-204.8 0A512.614 512.614 0 0 1 0 604.16h105.062A410.317 410.317 0 0 0 399.36 898.458v105.062z m204.8-898.458V0a512.614 512.614 0 0 1 399.36 399.36H898.458A410.317 410.317 0 0 0 604.16 105.062z m-204.8 0A410.317 410.317 0 0 0 105.062 399.36H0A512.614 512.614 0 0 1 399.36 0v105.062zM512 665.6a153.6 153.6 0 1 0 0-307.2 153.6 153.6 0 0 0 0 307.2z m0 102.4a256 256 0 1 1 0-512 256 256 0 0 1 0 512z"
+                p-id="10371"></path>
         </g>
       </g>
     </g>
@@ -92,6 +92,10 @@ export default {
       default: false
     },
     nodeColor: String,
+    canHoverSteps: {
+      type: Boolean,
+      default: false,
+    },
   },
   data() {
     return {
@@ -133,13 +137,16 @@ export default {
       }
     },
     handleClick() {
-      // console.log("click", this.node);
-      this.nodeClass = 'pipeline-node-selected'
-      if (this.status != 'start' && this.status != 'end') {
-        this.$emit('click', this.index, this.node)
-      }
+      //Убрано за ненадобностью, но мб когда-то понадобится в будущем
+      // this.nodeClass = 'pipeline-node-selected'
+      // if (this.status != 'start' && this.status != 'end') {
+      //   this.$emit('click', this.index, this.node)
+      // }
     },
     handleMouseEnter() {
+      if (!this.canHoverSteps) {
+        return;
+      }
       this.nodeClass = 'pipeline-node-selected'
       let rect = null;
       if (this.status!=='start' && this.status!=='end') {

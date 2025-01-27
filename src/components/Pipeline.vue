@@ -36,6 +36,7 @@
       :index="idx"
       :selected="selectedList[idx]"
       :nodeColor="item.color"
+      :can-hover-steps="canHoverSteps"
       @click="handleClick"
       @mouseenter="handleStepMouseEnter"
       @mouseleave="handleStepMouseLeave"
@@ -106,7 +107,11 @@ export default {
     canHoverLines: {
       type: Boolean,
       default: false,
-    }
+    },
+    canHoverSteps: {
+      type: Boolean,
+      default: false,
+    },
   },
   data() {
     return {

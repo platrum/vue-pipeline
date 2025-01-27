@@ -120,6 +120,27 @@ export default {
       });
       this.isHovered = false;
     },
+    getYCoordinate(layerY, nodeY, y, nodeHeight) {
+      if (layerY === nodeY) {
+        return y + nodeHeight;
+      }
+      if (layerY - nodeY > 0) {
+        const diff = layerY - nodeY;
+        if (nodeHeight > 0) {
+          return y - diff + nodeHeight;
+        }
+
+        return y - diff;
+      }
+      if (nodeY - layerY > 0) {
+        const diff = nodeY - layerY;
+        if (nodeHeight > 0) {
+          return y + (nodeHeight - diff);
+        }
+
+        return y + diff;
+      }
+    },
   }
 };
 </script>
