@@ -3,7 +3,7 @@
   <svg class="pipeline" :width="width" :height="height">
     <defs>
       <marker :id="'idArrow'+i" v-for="i in [0,1,2,3,4,5]" :key="'arrow'+i" :class="'weight'+i" viewBox="0 0 20 20"
-        refX="13" refY="10" markerUnits="strokeWidth" markerWidth="3" markerHeight="10" orient="auto">
+              refX="13" refY="10" markerUnits="strokeWidth" markerWidth="3" markerHeight="10" orient="auto">
         <path d="M 0 0 L 20 10 L 0 20 z" />
       </marker>
     </defs>
@@ -16,7 +16,12 @@
       :weight="item.weight"
       :lineStyle="lineStyle"
       :lineColor="item.color"
+      :lineData="item"
+      :can-hover-lines="canHoverLines"
+      @mouseenter="handleLineMouseEnter"
+      @mouseleave="$emit('line-mouseleave', $event)"
     />
+
     <pipeline-node
       v-for="(item,idx) in nodeList"
       :key="'node'+idx"
@@ -31,9 +36,10 @@
       :index="idx"
       :selected="selectedList[idx]"
       :nodeColor="item.color"
+      :can-hover-steps="canHoverSteps"
       @click="handleClick"
-      @mouseenter="handleMouseEnter"
-      @mouseleave="handleMouseLeave"
+      @mouseenter="handleStepMouseEnter"
+      @mouseleave="handleStepMouseLeave"
     />
   </svg>
 </template>
@@ -97,7 +103,15 @@ export default {
     colored: {
       type: Boolean,
       default: false,
-    }
+    },
+    canHoverLines: {
+      type: Boolean,
+      default: false,
+    },
+    canHoverSteps: {
+      type: Boolean,
+      default: false,
+    },
   },
   data() {
     return {
@@ -126,11 +140,11 @@ export default {
       this.selectedList[index] = true;
       this.$emit("select", node);
     },
-    handleMouseEnter(index, node, rect) {
-      this.$emit("mouseenter", node, rect);
+    handleStepMouseEnter(node, rect) {
+      this.$emit("step-mouseenter", node, rect);
     },
-    handleMouseLeave(index, node) {
-      this.$emit("mouseleave", node);
+    handleStepMouseLeave(node) {
+      this.$emit("step-mouseleave", node);
     },
     render() {
       this.service = new Pipeline(
@@ -201,6 +215,12 @@ export default {
           delete line.color;
         }
       });
+    },
+    handleLineMouseEnter(data) {
+      const lineIndex = this.lineList.findIndex(line => line.path === data.lineData.path);
+      this.lineList.splice(lineIndex, 1);
+      this.lineList.push(data.lineData);
+      this.$emit('line-mouseenter', data);
     },
   },
   mounted() {
